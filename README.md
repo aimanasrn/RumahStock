@@ -8,6 +8,10 @@ A mobile-first household essentials app built with Next.js App Router, strict Ty
 
 Email confirmation remains enabled. The local callback/confirmation URLs are allowlisted, and the hosted minimum password length is eight characters. When deploying, add that deployment’s origin and auth callback URLs in Supabase and update `NEXT_PUBLIC_SITE_URL`.
 
+The tracked `.env.production` contains only RumahStock's public Supabase URL, publishable browser key, and canonical production origin (`https://rumah-stock.vercel.app`). Next.js loads it during production builds, including Vercel Git deployments. Vercel environment variables take precedence if configured there. Keep private credentials in ignored local files or Vercel's environment settings. A different Supabase project requires replacing both public project values together.
+
+In Supabase → Authentication → URL Configuration, use `https://rumah-stock.vercel.app` as the Site URL and allow `https://rumah-stock.vercel.app/auth/callback**` plus `https://rumah-stock.vercel.app/auth/confirm**` for confirmation and recovery callbacks (the suffix permits query parameters). Retain the localhost entries for development. Password login for confirmed accounts does not depend on email callback settings.
+
 Hosted verification passed for password login, session persistence, owner/member invitations, private uploads, cross-household isolation, partial purchases, duplicate protection, conflict handling, and synchronization between two signed-in browser sessions. Temporary test accounts, households, purchases and images were removed. Signup/recovery email delivery still needs checking using your own mailbox; no test email was sent.
 
 Without configuration, `/` opens `/demo`, a clearly labeled interactive sample household. Its changes persist in this browser’s localStorage under `rumahstock:explicit-demo:v1`. It never authenticates a user, uploads images, calls a real household, or seeds production data. You can reset it in demo Settings. Real protected routes redirect to login and fail closed without configuration.

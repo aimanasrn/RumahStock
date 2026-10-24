@@ -3,6 +3,7 @@ node_modules/
 out/
 .env*
 !.env.example
+!.env.production
 *.tsbuildinfo
 .supabase/
 supabase/.temp/
