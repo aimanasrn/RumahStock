@@ -1,0 +1,7 @@
+node_modules
+.next
+package-lock.json
+src/lib/database.types.ts
+supabase/config.toml
+docs/design-concept.png
+test-results

@@ -1,0 +1,125 @@
+// Explicit sample data. Never inserted into Supabase or mixed with a real household.
+import type { Snapshot, Product } from "./domain";
+export const demoId = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, "0")}`;
+const stamp = "2026-10-24T08:00:00+08:00",
+  hid = demoId(1),
+  uid = demoId(2);
+const names: [string, string, string][] = [
+  ["Fresh milk", "1 L", "Drinks"],
+  ["Jasmine rice", "5 kg", "Food and pantry"],
+  ["Dishwashing liquid", "900 ml", "Cleaning supplies"],
+  ["Free-range eggs", "10 pieces", "Food and pantry"],
+  ["Toilet paper", "12 rolls", "Toiletries"],
+  ["Cooking oil", "1 L", "Food and pantry"],
+  ["Wholemeal bread", "400 g", "Food and pantry"],
+  ["Laundry detergent", "2 L", "Cleaning supplies"],
+  ["Ground coffee", "250 g", "Drinks"],
+  ["Hand wash", "500 ml", "Toiletries"],
+  ["Oat milk", "1 L", "Drinks"],
+  ["Pasta", "500 g", "Food and pantry"],
+  ["Brown sugar", "1 kg", "Food and pantry"],
+  ["Sea salt", "500 g", "Food and pantry"],
+  ["Black pepper", "50 g", "Food and pantry"],
+  ["Soy sauce", "500 ml", "Food and pantry"],
+  ["Shampoo", "650 ml", "Toiletries"],
+  ["Toothpaste", "150 g", "Toiletries"],
+  ["Baby wipes", "80 pieces", "Baby essentials"],
+  ["Nappies", "40 pieces", "Baby essentials"],
+  ["All-purpose cleaner", "500 ml", "Cleaning supplies"],
+  ["Bin bags", "30 pieces", "Other household items"],
+  ["Tea bags", "25 pieces", "Drinks"],
+  ["Fresh tomatoes", "Loose", "Food and pantry"],
+];
+export function demoSnapshot(): Snapshot {
+  const products: Product[] = names.map(([name, package_size, category], i) => ({
+    id: demoId(100 + i),
+    household_id: hid,
+    name,
+    package_size,
+    category,
+    barcode: i === 0 ? "9556001123459" : null,
+    brand: "",
+    notes: "Sample product for the interactive preview.",
+    image_path: null,
+    source: "manual",
+    archived_at: null,
+    created_at: stamp,
+    updated_at: stamp,
+  }));
+  const units = ["bottle", "bag", "bottle", "pack", "pack", "bottle"];
+  const entries = products.slice(0, 6).map((p, i) => ({
+    id: demoId(200 + i),
+    household_id: hid,
+    list_id: demoId(3),
+    product_id: p.id,
+    quantity: i === 0 ? 2 : 1,
+    purchase_unit: units[i],
+    priority: i === 0 ? "urgent" : "normal",
+    notes: "",
+    status: "pending",
+    added_by: uid,
+    purchased_by: null,
+    version: 1,
+    created_at: stamp,
+    updated_at: stamp,
+  }));
+  const purchases = [
+    {
+      id: demoId(300),
+      household_id: hid,
+      store: "Neighbourhood market",
+      purchase_date: "2026-10-18",
+      recorded_by: uid,
+      request_id: demoId(301),
+      request_payload: {},
+      created_at: "2026-10-18T10:00:00+08:00",
+    },
+  ];
+  const lines = [0, 1, 2, 4, 6, 8].map((i, j) => ({
+    id: demoId(400 + j),
+    household_id: hid,
+    purchase_id: demoId(300),
+    product_id: products[i].id,
+    entry_id: null,
+    product_name: products[i].name,
+    package_size: products[i].package_size,
+    quantity: 1,
+    purchase_unit: units[i] ?? "pack",
+    unit_price: [7.5, 35.9, 8.5, 12.9, 5.8, 18.5][j],
+    line_total: [7.5, 35.9, 8.5, 12.9, 5.8, 18.5][j],
+    created_at: purchases[0].created_at,
+  }));
+  return {
+    profile: { id: uid, name: "Aina Rahman", created_at: stamp, updated_at: stamp },
+    household: {
+      id: hid,
+      name: "The Rahman home",
+      created_by: uid,
+      created_at: stamp,
+      updated_at: stamp,
+    },
+    role: "owner",
+    products,
+    entries,
+    purchases,
+    lines,
+    availability: products.map((p, i) => ({
+      product_id: p.id,
+      household_id: hid,
+      status: i === 0 || i === 4 ? "out" : i < 6 ? "low" : "enough",
+      updated_by: uid,
+      updated_at: stamp,
+    })),
+    members: [
+      { user_id: uid, household_id: hid, role: "owner", joined_at: stamp, name: "Aina Rahman" },
+      {
+        user_id: demoId(4),
+        household_id: hid,
+        role: "member",
+        joined_at: stamp,
+        name: "Farid Rahman",
+      },
+    ],
+    invitations: [],
+  };
+}

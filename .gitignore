@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+.env*
+!.env.example
+*.tsbuildinfo
+.supabase/
+supabase/.temp/
+playwright-report/
+test-results/
+public/wasm/*.wasm
